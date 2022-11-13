@@ -1,14 +1,15 @@
 import * as cdk from 'aws-cdk-lib';
+import { DnsDefinitionStack } from './dns-definition-stack';
 
 export class AwsCdkAllStack extends cdk.Stack {
   constructor(parent: cdk.App, name: string, props?: cdk.StackProps) {
     super(parent, name, props);
 
-    // The code that defines your stack goes here
+    const dnsDefinitionStack = new DnsDefinitionStack(parent, 'DnsDefinitionStack', {
+      // aburkeTechDomain: parent.node.tryGetContext('aburketechdomain'),
+      aburkeTechDomain: 'dummy',
+    });
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'AwsCdkAllQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    cdk.Tags.of(dnsDefinitionStack).add('Project', 'Dns Definition Stack for AburkeTech');
   }
 }
