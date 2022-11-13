@@ -6,10 +6,10 @@ export class AwsCdkAllStack extends cdk.Stack {
     super(parent, name, props);
 
     const dnsDefinitionStack = new DnsDefinitionStack(parent, 'DnsDefinitionStack', {
-      // aburkeTechDomain: parent.node.tryGetContext('aburketechdomain'),
-      aburkeTechDomain: 'dummy',
+      aburkeTechDomain: parent.node.tryGetContext('abtechdomain'),
+      www: parent.node.tryGetContext('www'),
     });
 
-    cdk.Tags.of(dnsDefinitionStack).add('Project', 'Dns Definition Stack for AburkeTech');
+    cdk.Tags.of(dnsDefinitionStack).add('Project', 'Dns Definition Stack for aburke.tech');
   }
 }
