@@ -1,0 +1,44 @@
+.container {
+  margin: 50px auto 50px auto;
+  height: 80vh;
+  height: 1500px;
+  border: solid lightgrey 1px;
+  border-radius: .5em;
+
+  /* TODO: comment out, for visualizing the container */
+
+}
+
+@media (min-width: 0px) and (max-width: 1000px) {
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+}
+@media (min-width: 1000px) and (max-width: 1200px) {
+  .container {
+    width: 80%;
+    height: 100%;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1750px) {
+  .container {
+    width: 70%;
+    height: 100%;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1750px) {
+  .container {
+    width: 70%;
+  }
+}
+@media (min-width: 1750px) and (max-width: 2300px) {
+  .container {
+    width: 60%;
+  }
+}
+@media (min-width: 2300px) {
+  .container {
+    width: 50%;
+  }
+}

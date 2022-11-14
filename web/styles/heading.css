@@ -1,0 +1,43 @@
+.heading {
+  height: 100px;
+  background-color: lightgrey;
+  border: solid 1px lightgrey;
+  border-top-left-radius: .5em;
+  border-top-right-radius: .5em;
+
+  /* TODO: delete, for testing purposes */
+}
+
+.heading > div {
+  margin-top: 28px;
+}
+.heading > div > h1 {
+  margin: 0;
+  color: grey;
+  font-family: sans-serif;
+  font-size: 45px;
+}
+.heading > div > div {
+  float: left;
+  margin-right: 10px;
+}
+.heading > div > div > div {
+  float: left;
+  color: orange;
+  margin-right: 4px;
+}
+.heading > div > div > a {
+  text-decoration: none;
+  color: black;
+}
+
+@media (min-width: 0px) and (max-width: 1000px) {
+  .heading > div > h1 {
+    font-size: 40px;
+  }
+}
+@media (min-width: 0px) and (max-width: 768px) {
+  .heading > div {
+    margin-top: 15px;
+  }
+}

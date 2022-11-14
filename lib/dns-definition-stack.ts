@@ -6,6 +6,7 @@ import * as sm from 'aws-cdk-lib/aws-secretsmanager';
 interface IDnsDefinitionProps extends cdk.StackProps {
   aburkeTechDomain: string;
   www: string;
+  env: cdk.Environment;
 }
 
 export class DnsDefinitionStack extends cdk.Stack {
