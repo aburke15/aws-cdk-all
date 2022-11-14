@@ -1,0 +1,10 @@
+.summary {
+
+
+  /* TODO: delete */
+  height: auto;
+}
+
+.summary > h3 {
+  color: orange;
+}
