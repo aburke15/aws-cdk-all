@@ -40,7 +40,7 @@ export class DnsDefinitionStack extends cdk.Stack {
 
     // cfn out the cname record
     new cdk.CfnOutput(this, 'CnameDomainName', {
-      value: aburkeTechCname.domainName,
+      value: `https://${aburkeTechCname.domainName}`,
     });
 
     // redirect aburke.tech to www.aburke.tech
