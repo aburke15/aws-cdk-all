@@ -22,7 +22,7 @@ export class CloudResumeStack extends cdk.Stack {
     const siteDomain: string = `${props.res}.${props.aburkeTechDomain}`;
 
     new cdk.CfnOutput(this, 'SiteDomain', {
-      value: siteDomain,
+      value: `https://${siteDomain}`,
     });
 
     const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'cloudfront-OAI', {
@@ -36,10 +36,6 @@ export class CloudResumeStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       publicReadAccess: true,
       autoDeleteObjects: true,
-    });
-
-    new cdk.CfnOutput(this, 'Bucket', {
-      value: cloudResumeBucket.bucketName,
     });
 
     const certArnSecret = sm.Secret.fromSecretNameV2(this, 'AburkeTechCertificateArnSecret', 'AbTechCertArn');
@@ -84,7 +80,7 @@ export class CloudResumeStack extends cdk.Stack {
     });
 
     // route 53 a record
-    const aRecord = new route53.ARecord(this, 'ResARecord', {
+    new route53.ARecord(this, 'ResARecord', {
       recordName: props.res,
       target: route53.RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
       zone,
@@ -92,10 +88,6 @@ export class CloudResumeStack extends cdk.Stack {
 
     // if stack is deleted, delete the a record
     // aRecord.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
-
-    new cdk.CfnOutput(this, 'ARecordDomainName', {
-      value: aRecord.domainName,
-    });
 
     // create bucket deployment and location of files to upload
     new s3deploy.BucketDeployment(this, 'AburkeTechBucketDeployment', {
