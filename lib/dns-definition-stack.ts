@@ -49,16 +49,5 @@ export class DnsDefinitionStack extends cdk.Stack {
       targetDomain: `${props.www}.${props.aburkeTechDomain}`,
       zone,
     });
-
-    // create a secret for the public hosted zone id to retrieved elsewhere
-    const zoneIdSecret = new sm.Secret(this, 'AburkeTechZoneIdSecret', {
-      secretName: 'AburkeTechZoneId',
-      secretStringValue: new cdk.SecretValue(zone.hostedZoneId),
-    });
-
-    // cfn out the zone id secret arn
-    new cdk.CfnOutput(this, 'ZoneIdSecretArn', {
-      value: zoneIdSecret.secretArn,
-    });
   }
 }
