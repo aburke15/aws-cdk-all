@@ -20,7 +20,7 @@ exports.handler = async (event: lambda.APIGatewayEvent) => {
     }
 
     const repos = await getReposFromGitHub();
-    const projects = parseGitHubReposIntoProjects(repos);
+    const projects = toGitHubProjects(repos);
     const recordCount = await insertProjectsIntoDynamo(ddb, projects);
 
     console.info(JSON.stringify(`Inserted ${recordCount} projects into GitHubTable`, null, 2));
@@ -60,7 +60,7 @@ const getReposFromGitHub = (): Promise<any[]> => {
   });
 };
 
-export const parseGitHubReposIntoProjects = (repos: any[]): GitHubProject[] => {
+export const toGitHubProjects = (repos: any[]): GitHubProject[] => {
   return repos.map((repo) => {
     const id: string = repo.id.toString();
     return {
