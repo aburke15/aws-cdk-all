@@ -51,10 +51,7 @@ export class GitHubProjectStack extends cdk.Stack {
       timeout,
       runtime: lambda.Runtime.NODEJS_16_X,
       handler: handlerName,
-      entry: lambda.Code.fromAsset(directoryName).path + '/github-repo-insert-function.ts',
-      bundling: {
-        minify: true,
-      },
+      entry: lambda.Code.fromAsset(directoryName).path + '/github-insert-projects-function.ts',
       environment: {
         GITHUB_USER: props.gitHubUser,
         GITHUB_PAT: gitHubPatSecret.secretValue.unsafeUnwrap().toString(),
@@ -67,13 +64,10 @@ export class GitHubProjectStack extends cdk.Stack {
       timeout,
       runtime: lambda.Runtime.NODEJS_16_X,
       handler: handlerName,
-      entry: lambda.Code.fromAsset(directoryName).path + '/github-repo-insert-function.ts',
-      bundling: {
-        minify: true,
-      },
+      entry: lambda.Code.fromAsset(directoryName).path + '/github-delete-projects-function.ts',
       environment: {
         TABLE_NAME: table.tableName,
-        DOWNSTREAM_FUNCTION: insertProjectsFunction.functionName,
+        DOWNSTREAM_FUNCTION_NAME: insertProjectsFunction.functionName,
       },
     });
 
