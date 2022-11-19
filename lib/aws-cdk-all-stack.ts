@@ -35,10 +35,7 @@ export class AwsCdkAllStack extends cdk.Stack {
       env,
     });
 
-    cdk.Tags.of(gitHubProjectStack).add(
-      'Project',
-      'GitHub Project Stack for fetching, inserting, and deleting projects'
-    );
+    cdk.Tags.of(gitHubProjectStack).add('Project', 'GitHub Project Stack inserting and deleting');
 
     // TODO: need a cloud resume page count updater stack
 

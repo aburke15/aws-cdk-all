@@ -60,21 +60,25 @@ const getReposFromGitHub = (): Promise<any[]> => {
   });
 };
 
-export const toGitHubProjects = (repos: any[]): GitHubProject[] => {
-  return repos.map((repo) => {
-    const id: string = repo.id.toString();
-    return {
-      id,
+const toGitHubProjects = (repos: any[]): GitHubProject[] => {
+  const projects: GitHubProject[] = [];
+  repos.forEach((repo) => {
+    const repoId = repo.id.toString();
+    const project: GitHubProject = {
+      id: repoId,
       name: repo.name,
-      createdAt: repo.create_at,
+      createdAt: repo.created_at,
       description: repo.description ?? 'N/A',
       htmlUrl: repo.html_url,
       language: repo.language ?? 'N/A',
-    } as GitHubProject;
+    };
+    projects.push(project);
   });
+
+  return projects;
 };
 
-export const insertProjectsIntoDynamo = async (ddb: aws.DynamoDB, projects: GitHubProject[]): Promise<number> => {
+const insertProjectsIntoDynamo = async (ddb: aws.DynamoDB, projects: GitHubProject[]): Promise<number> => {
   let count = 0;
   const tableName: string = process.env.TABLE_NAME!;
 
