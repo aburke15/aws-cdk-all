@@ -39,7 +39,6 @@ export class CloudResumeStack extends cdk.Stack {
     });
 
     const certArnSecret = sm.Secret.fromSecretNameV2(this, 'AburkeTechCertificateArnSecret', 'AbTechCertArn');
-
     const certificateArn = certArnSecret.secretValue.unsafeUnwrap().toString();
     const certificate = acm.Certificate.fromCertificateArn(this, 'AburkeTechCertificate', certificateArn);
 
@@ -70,6 +69,7 @@ export class CloudResumeStack extends cdk.Stack {
       },
     });
 
+    // cfn out the distribution id
     new cdk.CfnOutput(this, 'DistributionId', {
       value: distribution.distributionId,
     });
@@ -85,9 +85,6 @@ export class CloudResumeStack extends cdk.Stack {
       target: route53.RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
       zone,
     });
-
-    // if stack is deleted, delete the a record
-    // aRecord.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
 
     // create bucket deployment and location of files to upload
     new s3deploy.BucketDeployment(this, 'AburkeTechBucketDeployment', {

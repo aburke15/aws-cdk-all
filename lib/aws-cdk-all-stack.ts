@@ -28,5 +28,11 @@ export class AwsCdkAllStack extends cdk.Stack {
     });
 
     cdk.Tags.of(cloudResumeStack).add('Project', 'Cloud Resume Stack for my html resume');
+
+    // TODO: need a github projects fetch, insert, delete, stack
+
+    // TODO: need a cloud resume page count updater stack
+
+    // TODO: need a stack to expose get endpoints to the two above stacks
   }
 }
