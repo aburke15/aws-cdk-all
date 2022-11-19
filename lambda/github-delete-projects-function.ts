@@ -1,5 +1,5 @@
 import * as aws from 'aws-sdk';
-import * as lambda from 'aws-lambda';
+import * as api from 'aws-lambda';
 import * as dynamo from 'aws-sdk/clients/dynamodb';
 
 aws.config.update({ region: 'us-west-2' });
@@ -12,22 +12,22 @@ const functionName: string = process.env.DOWNSTREAM_FUNCTION_NAME!;
 const tableName: string = process.env.TABLE_NAME!;
 
 let ddb = new aws.DynamoDB(apiVersion);
-let func = new aws.Lambda();
+let lambda = new aws.Lambda();
 
-exports.handler = async (event: lambda.APIGatewayEvent) => {
+exports.handler = async (event: api.APIGatewayEvent) => {
   console.log(JSON.stringify(event, null, 2));
   try {
     if (!ddb) {
       ddb = new aws.DynamoDB(apiVersion);
     }
-    if (!func) {
-      func = new aws.Lambda();
+    if (!lambda) {
+      lambda = new aws.Lambda();
     }
 
     const data = await getProjectsFromDynamo(ddb);
     await deleteProjectsFromDynamo(ddb, data);
 
-    await func
+    await lambda
       .invoke({
         FunctionName: functionName,
         Payload: JSON.stringify(event, null, 2),
