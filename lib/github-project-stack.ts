@@ -49,7 +49,7 @@ export class GitHubProjectStack extends cdk.Stack {
     // 2 node js functions, one for getting projects from github and inserting them into dynamo db
     const insertProjectsFunction = new nodejs.NodejsFunction(this, 'GitHubInsertProjectsFunction', {
       timeout,
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_14_X,
       handler: handlerName,
       entry: lambda.Code.fromAsset(directoryName).path + '/github-insert-projects-function.ts',
       environment: {
@@ -62,7 +62,7 @@ export class GitHubProjectStack extends cdk.Stack {
     // one for deleting the projects just in case they are out of date
     const deleteProjectsFunction = new nodejs.NodejsFunction(this, 'GitHubDeleteProjectsFunction', {
       timeout,
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_14_X,
       handler: handlerName,
       entry: lambda.Code.fromAsset(directoryName).path + '/github-delete-projects-function.ts',
       environment: {
