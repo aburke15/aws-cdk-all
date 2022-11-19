@@ -5,6 +5,8 @@ import * as sm from 'aws-cdk-lib/aws-secretsmanager';
 import * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import { Function } from 'aws-cdk-lib/aws-lambda';
+import * as path from 'path';
 
 interface IGitHubProjectProps extends cdk.StackProps {
   gitHubUser: string;
@@ -47,11 +49,11 @@ export class GitHubProjectStack extends cdk.Stack {
     const gitHubPatSecret = sm.Secret.fromSecretNameV2(this, 'GitHubPatSecret', 'GitHubPersonalAccessToken');
 
     // 2 node js functions, one for getting projects from github and inserting them into dynamo db
-    const insertProjectsFunction = new nodejs.NodejsFunction(this, 'GitHubInsertProjectsFunction', {
+    const insertProjectsFunction = new lambda.Function(this, 'GitHubInsertProjectsFunction', {
       timeout,
       runtime: lambda.Runtime.NODEJS_14_X,
-      handler: handlerName,
-      entry: lambda.Code.fromAsset(directoryName).path + '/github-insert-projects-function.ts',
+      handler: `github-insert-projects-function.${handlerName}`,
+      code: lambda.Code.fromAsset(path.join(directoryName)),
       environment: {
         GITHUB_USER: props.gitHubUser,
         GITHUB_PAT: gitHubPatSecret.secretValue.unsafeUnwrap().toString(),
@@ -60,16 +62,18 @@ export class GitHubProjectStack extends cdk.Stack {
     });
 
     // one for deleting the projects just in case they are out of date
-    const deleteProjectsFunction = new nodejs.NodejsFunction(this, 'GitHubDeleteProjectsFunction', {
+    const deleteProjectsFunction = new lambda.Function(this, 'GitHubDeleteProjectsFunction', {
       timeout,
       runtime: lambda.Runtime.NODEJS_14_X,
-      handler: handlerName,
-      entry: lambda.Code.fromAsset(directoryName).path + '/github-delete-projects-function.ts',
+      handler: `github-delete-projects-function.${handlerName}`,
+      code: lambda.Code.fromAsset(path.join(directoryName)),
       environment: {
         TABLE_NAME: table.tableName,
         DOWNSTREAM_FUNCTION_NAME: insertProjectsFunction.functionName,
       },
     });
+
+    insertProjectsFunction.grantInvoke(deleteProjectsFunction);
 
     table.grantReadWriteData(deleteProjectsFunction);
     table.grantWriteData(insertProjectsFunction);
