@@ -2,10 +2,8 @@ import * as cdk from 'aws-cdk-lib';
 import * as ddb from 'aws-cdk-lib/aws-dynamodb';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as sm from 'aws-cdk-lib/aws-secretsmanager';
-import * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
-import { Function } from 'aws-cdk-lib/aws-lambda';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as path from 'path';
 
 interface IGitHubProjectProps extends cdk.StackProps {
@@ -38,8 +36,8 @@ export class GitHubProjectStack extends cdk.Stack {
     // 1 cron cloudwatch event which targets the delete and the delete invokes the insert
     const rule = new events.Rule(this, 'GitHubEventRule', {
       schedule: events.Schedule.cron({
-        minute: '0',
-        hour: '*/4',
+        minute: '5',
+        hour: '9,21',
         month: '*',
         weekDay: '1,3,5,7',
       }),
@@ -73,11 +71,10 @@ export class GitHubProjectStack extends cdk.Stack {
       },
     });
 
-    insertProjectsFunction.grantInvoke(deleteProjectsFunction);
-
     table.grantReadWriteData(deleteProjectsFunction);
     table.grantWriteData(insertProjectsFunction);
 
-    rule.addTarget(new LambdaFunction(deleteProjectsFunction));
+    insertProjectsFunction.grantInvoke(deleteProjectsFunction);
+    rule.addTarget(new targets.LambdaFunction(deleteProjectsFunction));
   }
 }
