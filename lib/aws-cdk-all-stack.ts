@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { CloudResumeStack } from './cloud-resume-stack';
 import { DnsDefinitionStack } from './dns-definition-stack';
+import { GitHubProjectStack } from './github-project-stack';
 
 export class AwsCdkAllStack extends cdk.Stack {
   constructor(parent: cdk.App, name: string, props?: cdk.StackProps) {
@@ -29,7 +30,15 @@ export class AwsCdkAllStack extends cdk.Stack {
 
     cdk.Tags.of(cloudResumeStack).add('Project', 'Cloud Resume Stack for my html resume');
 
-    // TODO: need a github projects fetch, insert, delete, stack
+    const gitHubProjectStack = new GitHubProjectStack(parent, 'GitHubProjectStack', {
+      gitHubUser: parent.node.tryGetContext('githubuser'),
+      env,
+    });
+
+    cdk.Tags.of(gitHubProjectStack).add(
+      'Project',
+      'GitHub Project Stack for fetching, inserting, and deleting projects'
+    );
 
     // TODO: need a cloud resume page count updater stack
 

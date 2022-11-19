@@ -8,6 +8,7 @@ import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 
 interface IGitHubProjectProps extends cdk.StackProps {
   gitHubUser: string;
+  env: cdk.Environment;
 }
 
 const timeout: cdk.Duration = cdk.Duration.seconds(30);
