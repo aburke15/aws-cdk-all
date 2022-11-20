@@ -5,15 +5,12 @@ import * as sm from 'aws-cdk-lib/aws-secretsmanager';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as path from 'path';
+import * as types from './utils/types';
 
 interface IGitHubProjectProps extends cdk.StackProps {
   gitHubUser: string;
   env: cdk.Environment;
 }
-
-const timeout: cdk.Duration = cdk.Duration.seconds(30);
-const handlerName: string = 'handler';
-const directoryName: string = 'lambda';
 
 export class GitHubProjectStack extends cdk.Stack {
   constructor(parent: cdk.App, name: string, props: IGitHubProjectProps) {
@@ -48,10 +45,10 @@ export class GitHubProjectStack extends cdk.Stack {
 
     // 2 node js functions, one for getting projects from github and inserting them into dynamo db
     const insertProjectsFunction = new lambda.Function(this, 'GitHubInsertProjectsFunction', {
-      timeout,
+      timeout: types.timeout,
       runtime: lambda.Runtime.NODEJS_14_X,
-      handler: `github-insert-projects-function.${handlerName}`,
-      code: lambda.Code.fromAsset(path.join(directoryName)),
+      handler: `github-insert-projects-function.${types.handlerName}`,
+      code: lambda.Code.fromAsset(path.join(types.directoryName)),
       environment: {
         GITHUB_USER: props.gitHubUser,
         GITHUB_PAT: gitHubPatSecret.secretValue.unsafeUnwrap().toString(),
@@ -61,10 +58,10 @@ export class GitHubProjectStack extends cdk.Stack {
 
     // one for deleting the projects just in case they are out of date
     const deleteProjectsFunction = new lambda.Function(this, 'GitHubDeleteProjectsFunction', {
-      timeout,
+      timeout: types.timeout,
       runtime: lambda.Runtime.NODEJS_14_X,
-      handler: `github-delete-projects-function.${handlerName}`,
-      code: lambda.Code.fromAsset(path.join(directoryName)),
+      handler: `github-delete-projects-function.${types.handlerName}`,
+      code: lambda.Code.fromAsset(path.join(types.directoryName)),
       environment: {
         TABLE_NAME: table.tableName,
         DOWNSTREAM_FUNCTION_NAME: insertProjectsFunction.functionName,
