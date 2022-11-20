@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
+import { AburkeTechApiStack } from './aburke-tech-api-stack';
 import { CloudResumeStack } from './cloud-resume-stack';
 import { DnsDefinitionStack } from './dns-definition-stack';
 import { GitHubProjectStack } from './github-project-stack';
@@ -39,6 +40,12 @@ export class AwsCdkAllStack extends cdk.Stack {
 
     // TODO: need a cloud resume page count updater stack
 
-    // TODO: need a stack to expose get endpoints to the two above stacks
+    const aburkeTechApiStack = new AburkeTechApiStack(parent, 'AburkeTechApiStack', {
+      aburkeTechDomain,
+      api: parent.node.tryGetContext('api'),
+      env,
+    });
+
+    cdk.Tags.of(aburkeTechApiStack).add('Project', 'AburkeTechApiStack definition and endpoints');
   }
 }

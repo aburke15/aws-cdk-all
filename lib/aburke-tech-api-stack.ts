@@ -1,15 +1,56 @@
 import * as cdk from 'aws-cdk-lib';
+import * as ag from 'aws-cdk-lib/aws-apigateway';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as sm from 'aws-cdk-lib/aws-secretsmanager';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import { AburkeTechApiEndpoints } from './aburke-tech-api-endpoints';
+import { AburkeTechApiFunctions } from './aburke-tech-api-functions';
+import { ApiGateway } from 'aws-cdk-lib/aws-route53-targets';
 
-interface IAburkeTechApiProps extends cdk.StackProps {}
+interface IAburkeTechApiProps extends cdk.StackProps {
+  aburkeTechDomain: string;
+  api: string;
+  env: cdk.Environment;
+}
 
 export class AburkeTechApiStack extends cdk.Stack {
   constructor(parent: cdk.App, name: string, props: IAburkeTechApiProps) {
     super(parent, name, props);
 
-    // A record, api.aburke.tech
+    // rest api gateway
+    const restApi = new ag.RestApi(this, 'AburkeTechRestApi', {
+      restApiName: 'AburkeTechRestApi',
+    });
 
-    // api.aburke.tech/projects -> returns a list of github projects
-    // api.aburke.tech/pagecount -> returns the page count of the res.aburke.tech page
-    // these endpoints just expose GETs and don't actually perform the logic
+    // functions
+    const lambdas = new AburkeTechApiFunctions(this, 'AburkeTechApiFunctions');
+
+    // endpoints
+    new AburkeTechApiEndpoints(this, 'AburkeTechApiEndpoints', {
+      restApi: restApi,
+      getProjectsFunction: lambdas.GetProjectsFunction,
+    });
+
+    // certificate
+    const certArnSecret = sm.Secret.fromSecretNameV2(this, 'AburkeTechCertArnSecret', 'AbTechCertArnUsWestTwo');
+    const certArn = certArnSecret.secretValue?.unsafeUnwrap()?.toString();
+    const cert = acm.Certificate.fromCertificateArn(this, 'AburkeTechCertificate', certArn);
+
+    restApi.addDomainName('AburkeTechApiDomain', {
+      domainName: `${props.api}.${props.aburkeTechDomain}`,
+      certificate: cert,
+    });
+
+    // domain
+    const zone = route53.PublicHostedZone.fromLookup(this, 'AburkeTechZone', {
+      domainName: props.aburkeTechDomain,
+    });
+
+    // A Record
+    new route53.ARecord(this, 'AburkeTechApiARecord', {
+      zone: zone,
+      target: route53.RecordTarget.fromAlias(new ApiGateway(restApi)),
+      recordName: props.api,
+    });
   }
 }
