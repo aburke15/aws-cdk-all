@@ -32,7 +32,7 @@ export class AburkeTechApiStack extends cdk.Stack {
     });
 
     // certificate
-    const certArnSecret = sm.Secret.fromSecretNameV2(this, 'AburkeTechCertArnSecret', 'AbTechCertArn');
+    const certArnSecret = sm.Secret.fromSecretNameV2(this, 'AburkeTechCertArnSecret', 'AbTechCertArnUsWestTwo');
     const certArn = certArnSecret.secretValue?.unsafeUnwrap()?.toString();
     const cert = acm.Certificate.fromCertificateArn(this, 'AburkeTechCertificate', certArn);
 
