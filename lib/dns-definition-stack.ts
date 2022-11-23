@@ -1,7 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as r53patterns from 'aws-cdk-lib/aws-route53-patterns';
-import * as sm from 'aws-cdk-lib/aws-secretsmanager';
 
 interface IDnsDefinitionProps extends cdk.StackProps {
   aburkeTechDomain: string;
@@ -17,7 +16,6 @@ export class DnsDefinitionStack extends cdk.Stack {
     // need to add nameservers from aws hosted zone to namecheap
     const zone = new route53.PublicHostedZone(this, 'AburkeTechZone', {
       zoneName: props.aburkeTechDomain,
-      comment: 'Public hosted zone for the aburke.tech domain.',
     });
 
     // if the stack is deleted, delete the hosted zone
