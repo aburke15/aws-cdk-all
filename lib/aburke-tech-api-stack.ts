@@ -41,8 +41,8 @@ export class AburkeTechApiStack extends cdk.Stack {
       certificate: cert,
     });
 
-    // domain
-    const zone = route53.PublicHostedZone.fromLookup(this, 'AburkeTechZone', {
+    // public hosted zone
+    const zone = route53.PublicHostedZone.fromLookup(this, 'ZoneForApi', {
       domainName: props.aburkeTechDomain,
     });
 

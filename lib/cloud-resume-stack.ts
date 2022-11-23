@@ -75,7 +75,7 @@ export class CloudResumeStack extends cdk.Stack {
     });
 
     // get public hosted zone from lookup via domain name
-    const zone = route53.PublicHostedZone.fromLookup(this, 'AburkeTechZone', {
+    const zone = route53.PublicHostedZone.fromLookup(this, 'ZoneForCloudResume', {
       domainName: props.aburkeTechDomain,
     });
 
