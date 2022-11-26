@@ -9,7 +9,6 @@ import * as types from './utils/types';
 
 interface IGitHubProjectProps extends cdk.StackProps {
   gitHubUser: string;
-  env: cdk.Environment;
 }
 
 export class GitHubProjectStack extends cdk.Stack {

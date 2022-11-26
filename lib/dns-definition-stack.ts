@@ -5,7 +5,6 @@ import * as r53patterns from 'aws-cdk-lib/aws-route53-patterns';
 interface IDnsDefinitionProps extends cdk.StackProps {
   aburkeTechDomain: string;
   www: string;
-  env: cdk.Environment;
 }
 
 export class DnsDefinitionStack extends cdk.Stack {

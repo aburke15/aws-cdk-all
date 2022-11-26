@@ -12,7 +12,6 @@ import * as sm from 'aws-cdk-lib/aws-secretsmanager';
 interface ICloudResumeProps extends cdk.StackProps {
   aburkeTechDomain: string;
   res: string;
-  env: cdk.Environment;
 }
 
 export class CloudResumeStack extends cdk.Stack {
