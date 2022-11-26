@@ -1,5 +1,55 @@
-const main = () => {
-  console.log('Hello Resume!');
+window.onload = async () => {
+  document.getElementById('page-visit-count').innerHTML = await getPageVisitCountFromLambda();
+  console.log('Updated page visit count');
 };
 
-main();
+const pageVisitCountName = 'pageVisitCount';
+
+const getPageVisitCountFromLambda = async () => {
+  try {
+    const url = 'https://api.aburke.tech/pagecount';
+    const response = await fetch(url);
+
+    const json = await response.json();
+    const data = JSON.parse(json);
+
+    return data.body.count;
+  } catch (error) {
+    console.error('Error getPageVisitCountFromLambda:', error);
+    console.log('Falling back to local storage');
+
+    return getPageVisitCount();
+  }
+};
+
+// Local storage access only
+const getPageVisitCount = () => {
+  setPageVisitCountIfNotExists();
+  updatePageVisitCount();
+
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        resolve(localStorage.getItem(pageVisitCountName));
+      } catch (error) {
+        console.error('Error getPageVisitCount:', error);
+        reject(error);
+      }
+    }, 200);
+  });
+};
+
+const setPageVisitCountIfNotExists = () => {
+  if (localStorage.getItem(pageVisitCountName) === null) {
+    localStorage.setItem(pageVisitCountName, 0);
+  }
+};
+
+const updatePageVisitCount = () => {
+  try {
+    const pageVisitCount = parseInt(localStorage.getItem(pageVisitCountName)) + 1;
+    localStorage.setItem(pageVisitCountName, pageVisitCount);
+  } catch (error) {
+    console.error('Error updatePageVisitCount:', error);
+  }
+};
