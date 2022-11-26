@@ -5,6 +5,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 interface IAburkeTechApiEndpointProps {
   restApi: ag.RestApi;
   getProjectsFunction: lambda.Function;
+  incrementPageCountFunction: lambda.Function;
 }
 
 export class AburkeTechApiEndpoints extends Construct {
@@ -20,11 +21,13 @@ export class AburkeTechApiEndpoints extends Construct {
       })
       .addMethod('GET', new ag.LambdaIntegration(props.getProjectsFunction));
 
-    props.restApi.root.addResource('pagecount', {
-      defaultCorsPreflightOptions: {
-        allowOrigins: ['*'],
-        allowMethods: ['GET'],
-      },
-    }); // add method once I have it ready
+    props.restApi.root
+      .addResource('pagecount', {
+        defaultCorsPreflightOptions: {
+          allowOrigins: ['*'],
+          allowMethods: ['GET'],
+        },
+      })
+      .addMethod('GET', new ag.LambdaIntegration(props.incrementPageCountFunction));
   }
 }

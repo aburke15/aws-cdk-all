@@ -10,7 +10,6 @@ import { ApiGateway } from 'aws-cdk-lib/aws-route53-targets';
 interface IAburkeTechApiProps extends cdk.StackProps {
   aburkeTechDomain: string;
   api: string;
-  env: cdk.Environment;
 }
 
 export class AburkeTechApiStack extends cdk.Stack {
@@ -29,6 +28,7 @@ export class AburkeTechApiStack extends cdk.Stack {
     new AburkeTechApiEndpoints(this, 'AburkeTechApiEndpoints', {
       restApi: restApi,
       getProjectsFunction: lambdas.GetProjectsFunction,
+      incrementPageCountFunction: lambdas.IncrementPageCountFunction,
     });
 
     // certificate

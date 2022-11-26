@@ -3,22 +3,22 @@ import { AburkeTechApiStack } from './aburke-tech-api-stack';
 import { CloudResumeStack } from './cloud-resume-stack';
 import { DnsDefinitionStack } from './dns-definition-stack';
 import { GitHubProjectStack } from './github-project-stack';
+import { ResumeTableStack } from './resume-table-stack';
 
 export class AwsCdkAllStack extends cdk.Stack {
-  constructor(parent: cdk.App, name: string, props?: cdk.StackProps) {
+  private props: cdk.StackProps;
+
+  constructor(parent: cdk.App, name: string, props: cdk.StackProps) {
     super(parent, name, props);
 
-    const env: cdk.Environment = {
-      account: process.env.CDK_DEFAULT_ACCOUNT,
-      region: process.env.CDK_DEFAULT_REGION,
-    };
+    this.props = props!;
 
     const aburkeTechDomain: string = parent.node.tryGetContext('abtechdomain');
 
     const dnsDefinitionStack = new DnsDefinitionStack(parent, 'DnsDefinitionStack', {
       aburkeTechDomain,
       www: parent.node.tryGetContext('www'),
-      env,
+      env: this.props.env,
     });
 
     cdk.Tags.of(dnsDefinitionStack).add('Project', 'Dns Definition Stack for aburke.tech');
@@ -26,26 +26,30 @@ export class AwsCdkAllStack extends cdk.Stack {
     const cloudResumeStack = new CloudResumeStack(parent, 'CloudResumeStack', {
       aburkeTechDomain,
       res: parent.node.tryGetContext('res'),
-      env,
+      env: this.props.env,
     });
 
     cdk.Tags.of(cloudResumeStack).add('Project', 'Cloud Resume Stack for my html resume');
 
     const gitHubProjectStack = new GitHubProjectStack(parent, 'GitHubProjectStack', {
       gitHubUser: parent.node.tryGetContext('githubuser'),
-      env,
+      env: this.props.env,
     });
 
     cdk.Tags.of(gitHubProjectStack).add('Project', 'GitHub Project Stack inserting and deleting');
 
-    // TODO: need a cloud resume page count updater stack
+    const resumeTableStack = new ResumeTableStack(parent, 'ResumeTableStack', {
+      env: this.props.env,
+    });
+
+    cdk.Tags.of(resumeTableStack).add('Project', 'Resume Table Stack definition for cloud resume functions');
 
     const aburkeTechApiStack = new AburkeTechApiStack(parent, 'AburkeTechApiStack', {
       aburkeTechDomain,
       api: parent.node.tryGetContext('api'),
-      env,
+      env: this.props.env,
     });
 
-    cdk.Tags.of(aburkeTechApiStack).add('Project', 'AburkeTechApiStack definition and endpoints');
+    cdk.Tags.of(aburkeTechApiStack).add('Project', 'Aburke Tech Api Stack definition and endpoints');
   }
 }
