@@ -13,13 +13,17 @@
     <link rel="stylesheet" href="./styles/skills.css">
     <link rel="stylesheet" href="./styles/exp.css">
     <link rel="stylesheet" href="./styles/edu.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
     <title>Resume - Andre Burke</title>
 </head>
 
-<body class="container">
+<body id="contentToBeExported" class="container">
     <div class="heading paddings">
         <div>
+            <a title="Download" onclick="exportToWordDoc('contentToBeExported', 'AndreBurkesResume.docx')" class="float">
+                <i class="fa fa-download my-float"></i>
+            </a>
             <h1>ANDRE BURKE</h1>
             <div>Page Visits: <i id="page-visit-count"></i></div>
             <div><b>|</b></div>
@@ -81,7 +85,7 @@
 
     <div class="exp paddings">
         <div>
-            <div>EXTRA SPACE STORAGE <b>|</b> Cottonwoon Heights, UT</div>
+            <div>EXTRA SPACE STORAGE <b>|</b> Cottonwood Heights, UT</div>
             <div class="exp-title">Software Engineer</div>
             <div class="exp-date">Nov. 2021 - Present</div>
             <hr class="exp-line">
@@ -130,7 +134,7 @@
             <div class="exp-date">Feb. 2018 - Apr. 2019</div>
             <hr class="exp-line">
             <div>
-                <li>Developed a new Web API project from sracth with a file upload piece that handled external applicant resumes.
+                <li>Developed a new Web API project from scratch with a file upload piece that handled external applicant resumes.
                 </li>
                 <li>Created Microsite web app for healthcare facility specific application submission.</li>
                 <li>Introduced an IoC container and Dependency Injection into the main recruiter staffing application called TRM.
@@ -144,9 +148,9 @@
             <div class="exp-date">Oct. 2016 - Jan. 2018</div>
             <hr class="exp-line">
             <div>
-                <li>Trained as a backend devloper with .NET Framework, C#, NHibernate, and MSSQL.</li>
-                <li>Main responsibilites were integrating old accounting systems with cloud construction software.</li>
-                <li>Created a file streaming feature in the customer managment app.</li>
+                <li>Trained as a backend developer with .NET Framework, C#, NHibernate, and MSSQL.</li>
+                <li>Main responsibilities were integrating old accounting systems with cloud construction software.</li>
+                <li>Created a file streaming feature in the customer management app.</li>
                 <li>Created an email notification feature.</li>
             </div>
         </div>
