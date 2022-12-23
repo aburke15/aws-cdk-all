@@ -8,7 +8,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "deploy": "tsc && cdk deploy --all -c abtechdomain=aburke.tech -c www=www -c res=res -c githubuser=aburke15 -c api=api"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.108",
