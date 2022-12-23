@@ -9,6 +9,22 @@
 
 }
 
+.float {
+  display: inline;
+	width: 50px;
+	height: 50px;
+  float: right;
+	background-color: orange;
+	color: #FFF;
+	border-radius: 50px;
+	text-align: center;
+	box-shadow: 2px 2px 3px #999;
+  z-index: 1;
+}
+.my-float{
+	margin-top: 16px;
+}
+
 @media (min-width: 0px) and (max-width: 1000px) {
   .container {
     width: 100%;
